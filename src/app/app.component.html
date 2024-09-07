@@ -1,5 +1,9 @@
-<google-map [options]="options" height="90vh" width="100%" (mapClick)="moveMap($event)"
-  (mapMousemove)="move($event)" />
+<google-map [options]="options" height="90vh" width="100%" (mapClick)="moveMap($event)" (mapMousemove)="move($event)" />
 
-<div>Latitude: {{display?.lat}}</div>
-<div>Longitude: {{display?.lng}}</div>
+
+
+<div class="container">
+  <div class="row">
+    <p>Latitude: {{display?.lat}}</p>
+    <p>Longitude: {{display?.lng}}</p>
+  </div>
