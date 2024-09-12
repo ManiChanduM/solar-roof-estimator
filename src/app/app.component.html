@@ -1,9 +1,11 @@
-<google-map [options]="options" height="90vh" width="100%" (mapClick)="moveMap($event)" (mapMousemove)="move($event)" />
-
-
-
-<div class="container">
+<div class="container mt-4">
+  <app-search-bar [initialValue]="defaultPlace.name" [map]="map" [zoom]="zoom" [location]="location"
+    [placesLibrary]="placesLibrary"></app-search-bar>
   <div class="row">
-    <p>Latitude: {{display?.lat}}</p>
-    <p>Longitude: {{display?.lng}}</p>
+    <div class="w-100" style="height: 60vh;" #mapElement></div>
   </div>
+  <div class="row">
+    <app-building-insights [location]="location" [map]="map" [geometryLibrary]="geometryLibrary" [googleMapsApiKey]="googleMapsApiKey"></app-building-insights>
+    <!-- <app-data-layers [map]="map"></app-data-layers> -->
+  </div>
+</div>

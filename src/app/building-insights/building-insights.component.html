@@ -1,0 +1,110 @@
+<ng-container *ngIf="configId">
+  <p class="fw-light fs-4 mt-3 text-center">Building Insights</p>
+
+  <table class="table table-bordered">
+    <thead>
+      <tr>
+        <th scope="col">Type</th>
+        <th scope="col">Value</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td>Yearly Energy</td>
+        <td>{{(panelConfig?.yearlyEnergyDcKwh * panelCapacityRatio / 1000).toFixed(2)}} MWh</td>
+      </tr>
+      <tr>
+        <td>Panels Count</td>
+        <td>{{panelConfig.panelsCount}} panels</td>
+      </tr>
+      <tr>
+        <td>Max Panel</td>
+        <td>{{buildingInsights.solarPotential.solarPanels.length}}</td>
+      </tr>
+      <tr>
+        <td>Panel Capacity</td>
+        <td>{{panelCapacityWattsInput}}</td>
+      </tr>
+      <tr>
+        <td>Annual Sunshine</td>
+        <td>{{buildingInsights.solarPotential.maxSunshineHoursPerYear}}</td>
+      </tr>
+      <tr>
+        <td>Roof area</td>
+        <td>{{buildingInsights.solarPotential.wholeRoofStats.areaMeters2}}</td>
+      </tr>
+      <tr>
+        <td>CO2</td>
+        <td>{{buildingInsights.solarPotential.carbonOffsetFactorKgPerMwh}}</td>
+      </tr>
+      <tr>
+        <td>Yeraly Energy</td>
+        <td>{{panelConfig.yearlyEnergyDcKwh * panelCapacityRatio}}</td>
+      </tr>
+    </tbody>
+  </table>
+  <div class="d-flex justify-content-end">
+    <button type="button" class="btn btn-light me-2" (click)="setPanelConfig(24)">Change Panels</button>
+    <button type="button" class="btn btn-light" (click)="setSolarPanels()">Set Solar Panels</button>
+  </div>
+
+  <p class="fw-light fs-4 mt-3 text-center">Solar Potential Analysis</p>
+  <table class="table table-bordered">
+    <thead>
+      <tr>
+        <th scope="col">Type</th>
+        <th scope="col">Value</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td>Yearly Energy</td>
+        <td> kWh</td>
+      </tr>
+      <tr>
+        <td>Installation Size</td>
+        <td>kW</td>
+      </tr>
+      <tr>
+        <td>Installtion Cost</td>
+        <td></td>
+      </tr>
+      <tr>
+        <td>Energy Covered</td>
+        <td>%</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <p class="fw-light fs-4 mt-3 text-center">Cost Analysis for 20 years</p>
+  <table class="table table-bordered">
+    <thead>
+      <tr>
+        <th scope="col">Type</th>
+        <th scope="col">Value</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td>Cost without solar</td>
+        <td></td>
+      </tr>
+      <tr>
+        <td>Cost with solar</td>
+        <td></td>
+      </tr>
+      <tr>
+        <td>Savings</td>
+        <td></td>
+      </tr>
+      <tr>
+        <td>Break Even</td>
+        <td></td>
+      </tr>
+      <tr>
+        <td>Monthy average bill</td>
+        <td>$300</td>
+      </tr>
+    </tbody>
+  </table>
+</ng-container>
