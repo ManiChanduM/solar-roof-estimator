@@ -59,6 +59,7 @@ export class BuildingInsightsComponent implements OnInit {
 
   ngOnChanges() {
     if (this.location) {
+      // console.log(this.location.lat(), this.location.lng());
       this.buildingInsightsService.findClosestBuilding(this.location, this.googleMapsApiKey).subscribe(res => {
         this.buildingInsights = res;
 
