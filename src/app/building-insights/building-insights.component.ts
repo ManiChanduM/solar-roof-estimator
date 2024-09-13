@@ -4,16 +4,17 @@ import { BuildingInsightsService } from '../shared/services/building-insights.se
 import { CommonModule, JsonPipe } from '@angular/common';
 import { createPalette, normalize, rgbToColor } from './../shared/utils/visualize';
 import { panelsPalette } from './../shared/utils/colors';
+import { FormsModule } from '@angular/forms'; // Import FormsModule for ngModel support
+import { SliderModule } from 'primeng/slider'; // Import PrimeNG Slider
 
 @Component({
   selector: 'app-building-insights',
   standalone: true,
-  imports: [JsonPipe, CommonModule],
+  imports: [JsonPipe, CommonModule, FormsModule, SliderModule],
   templateUrl: './building-insights.component.html',
   styleUrl: './building-insights.component.scss'
 })
 export class BuildingInsightsComponent implements OnInit {
-
   expandedSection!: string;
   buildingInsights!: BuildingInsightsResponse | any;
   configId!: number;
@@ -30,7 +31,6 @@ export class BuildingInsightsComponent implements OnInit {
 
   requestSent = false;
   requestError: RequestError | undefined;
-  // apiResponseDialog: MdDialog;
 
   panelConfig: SolarPanelConfig | any;
 
@@ -44,27 +44,23 @@ export class BuildingInsightsComponent implements OnInit {
   energyCostPerKwhInput = 0.31;
   dcToAcDerateInput = 0.85;
 
+  // Slider settings
+  panelCount: number = 30; // Default value for the slider
+
   // Find the config that covers the yearly energy consumption.
   yearlyKwhEnergyConsumption!: number;
 
-
-  constructor(private buildingInsightsService: BuildingInsightsService,) { }
+  constructor(private buildingInsightsService: BuildingInsightsService) { }
 
   ngOnInit() {
-
-
-  }
-
-  // Building Insights Config
-  buildingInsightsReq() {
+    // Automatically call the function to set panels when the component initializes
+    this.setSolarPanels();
   }
 
   ngOnChanges() {
     if (this.location) {
       this.buildingInsightsService.findClosestBuilding(this.location, this.googleMapsApiKey).subscribe(res => {
         this.buildingInsights = res;
-        console.log(this.buildingInsights);
-
 
         if (!this.configId) {
           this.defaultPanelCapacity = this.buildingInsights.solarPotential.panelCapacityWatts;
@@ -72,9 +68,9 @@ export class BuildingInsightsComponent implements OnInit {
           this.panelCapacityRatio = this.panelCapacityWattsInput / this.defaultPanelCapacity;
           this.configId = this.findSolarConfig(this.buildingInsights.solarPotential.solarPanelConfigs, this.yearlyKwhEnergyConsumption, this.panelCapacityRatio, this.dcToAcDerateInput);
           this.setPanelConfig(this.configId);
-          console.log('Panel Count:', this.panelConfig.panelsCount);
-          console.log('Max Panels', this.buildingInsights.solarPotential.solarPanels.length);
-          console.log('Yearly Energy', this.panelConfig.yearlyEnergyDcKwh * this.panelCapacityRatio);
+
+          // Automatically set panels after getting the response
+          this.setSolarPanels();
         }
       }, err => {
         console.error('GET buildingInsights error\n', err);
@@ -95,28 +91,33 @@ export class BuildingInsightsComponent implements OnInit {
     this.panelConfig = this.buildingInsights.solarPotential.solarPanelConfigs[this.configId];
   }
 
-  solarPanels: google.maps.Polygon[] = [];
-
   setSolarPanels() {
-    // Create the solar panels on the map.
+    if (!this.buildingInsights || !this.buildingInsights.solarPotential) return;
+  
+    // Clear any existing panels from the map
+    this.solarPanels.forEach((panel) => panel.setMap(null));
+    this.solarPanels = [];
+  
     const solarPotential = this.buildingInsights.solarPotential;
     const palette = createPalette(panelsPalette).map(rgbToColor);
     const minEnergy = solarPotential.solarPanels.slice(-1)[0].yearlyEnergyDcKwh;
     const maxEnergy = solarPotential.solarPanels[0].yearlyEnergyDcKwh;
-    this.solarPanels.map((panel) => panel.setMap(null));
-    this.solarPanels = [];
-    this.solarPanels = solarPotential.solarPanels.map((panel: any) => {
+  
+    // Create solar panels based on the slider value (panelCount)
+    this.solarPanels = solarPotential.solarPanels.slice(0, this.panelCount).map((panel: any) => {
       const [w, h] = [solarPotential.panelWidthMeters / 2, solarPotential.panelHeightMeters / 2];
       const points = [
         { x: +w, y: +h }, // top right
         { x: +w, y: -h }, // bottom right
         { x: -w, y: -h }, // bottom left
         { x: -w, y: +h }, // top left
-        { x: +w, y: +h }, //  top right
+        { x: +w, y: +h }, // top right again to close the polygon
       ];
-      const orientation = panel.orientation == 'PORTRAIT' ? 90 : 0;
+  
+      const orientation = panel.orientation === 'PORTRAIT' ? 90 : 0;
       const azimuth = solarPotential.roofSegmentStats[panel.segmentIndex].azimuthDegrees;
       const colorIndex = Math.round(normalize(panel.yearlyEnergyDcKwh, maxEnergy, minEnergy) * 255);
+  
       return new google.maps.Polygon({
         paths: points.map(({ x, y }) =>
           this.geometryLibrary.spherical.computeOffset(
@@ -132,14 +133,14 @@ export class BuildingInsightsComponent implements OnInit {
         fillOpacity: 0.9,
       });
     });
-
-    this.solarPanels.map((panel, i) =>
-      panel.setMap(this.showPanels && this.panelConfig && i < this.panelConfig.panelsCount ? this.map : null),
-    );
-
+  
+    // Add the newly created solar panels to the map based on the slider's value
+    this.solarPanels.forEach((panel, i) => {
+      if (this.showPanels && this.panelConfig && i < this.panelCount) {
+        panel.setMap(this.map);
+      }
+    });
   }
 
-
-
-
+  solarPanels: google.maps.Polygon[] = [];
 }

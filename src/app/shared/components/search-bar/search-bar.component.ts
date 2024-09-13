@@ -1,4 +1,4 @@
-import { AfterViewInit, Component, ElementRef, Input, OnInit, ViewChild } from '@angular/core';
+import { AfterViewInit, Component, ElementRef, EventEmitter, Input, OnInit, Output, ViewChild } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { GoogleMap } from '@angular/google-maps';
 import { AutoCompleteModule } from 'primeng/autocomplete';
@@ -20,7 +20,12 @@ export class SearchBarComponent implements OnInit, AfterViewInit {
   @Input('zoom') zoom!: number;
   @ViewChild('textFieldElement') textFieldElement!: ElementRef;
   autocomplete!: google.maps.places.Autocomplete;
-  ngOnInit() {}
+
+
+  ngOnInit() {
+
+  }
+
 
   ngAfterViewInit() {
     this.autocomplete = new google.maps.places.Autocomplete(this.textFieldElement.nativeElement, {
@@ -36,6 +41,8 @@ export class SearchBarComponent implements OnInit, AfterViewInit {
       if (place.geometry.viewport) {
         this.map.fitBounds(place.geometry.viewport);
         this.map.setCenter(place.geometry.location);
+
+        // this.updatedLocation = new google.maps.LatLng(place.geometry.location.lat(), place.geometry.location.lng());
         this.map.setZoom(this.zoom);
       } else {
         this.map.setCenter(place.geometry.location);

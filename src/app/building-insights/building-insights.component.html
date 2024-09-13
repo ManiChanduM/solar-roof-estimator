@@ -15,7 +15,7 @@
       </tr>
       <tr>
         <td>Panels Count</td>
-        <td>{{panelConfig.panelsCount}} panels</td>
+        <td>{{panelCount}} panels</td>
       </tr>
       <tr>
         <td>Max Panel</td>
@@ -34,19 +34,17 @@
         <td>{{buildingInsights.solarPotential.wholeRoofStats.areaMeters2}}</td>
       </tr>
       <tr>
-        <td>CO2</td>
+        <td>CO2 Savings</td>
         <td>{{buildingInsights.solarPotential.carbonOffsetFactorKgPerMwh}}</td>
-      </tr>
-      <tr>
-        <td>Yeraly Energy</td>
-        <td>{{panelConfig.yearlyEnergyDcKwh * panelCapacityRatio}}</td>
       </tr>
     </tbody>
   </table>
-  <div class="d-flex justify-content-end">
-    <button type="button" class="btn btn-light me-2" (click)="setPanelConfig(24)">Change Panels</button>
-    <button type="button" class="btn btn-light" (click)="setSolarPanels()">Set Solar Panels</button>
-  </div>
+
+
+  <p-slider [(ngModel)]="panelCount" [min]="1" [max]="buildingInsights.solarPotential.maxArrayPanelsCount" styleClass="mb-4" [step]="1" (onChange)="setSolarPanels()"></p-slider>
+
+  <p class="text-center">Selected Panels: {{panelCount}}</p>
+
 
   <p class="fw-light fs-4 mt-3 text-center">Solar Potential Analysis</p>
   <table class="table table-bordered">

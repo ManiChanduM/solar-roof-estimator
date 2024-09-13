@@ -1,6 +1,12 @@
 <div class="container mt-4">
-  <app-search-bar [initialValue]="defaultPlace.name" [map]="map" [zoom]="zoom" [location]="location"
-    [placesLibrary]="placesLibrary"></app-search-bar>
+  <app-search-bar
+  [initialValue]="defaultPlace.name"
+  [location]="location"
+  [placesLibrary]="placesLibrary"
+  [map]="map"
+  [zoom]="zoom"
+>
+</app-search-bar>
   <div class="row">
     <div class="w-100" style="height: 60vh;" #mapElement></div>
   </div>
@@ -9,3 +15,4 @@
     <!-- <app-data-layers [map]="map"></app-data-layers> -->
   </div>
 </div>
+

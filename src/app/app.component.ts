@@ -16,8 +16,9 @@ import { BuildingInsightsResponse } from './shared/interfaces/solar.interface';
   styleUrl: './app.component.scss',
 })
 export class AppComponent implements OnInit {
+  
   title = 'solar-roof-estimator';
-  googleMapsApiKey = '';
+  googleMapsApiKey = 'AIzaSyBgBzxUb1STGGRI4gMGooODJYRVG_yUK9o';
   defaultPlace = {
     name: 'Rinconada Library',
     address: '1213 Newell Rd, Palo Alto, CA 94303',
@@ -38,7 +39,11 @@ export class AppComponent implements OnInit {
   ngOnInit() {
     this.primengConfig.ripple = true;
     this.loadGoogleMaps();
+    
   }
+
+
+  
 
   loadGoogleMaps() {
     // Load the Google Maps libraries.
@@ -63,6 +68,7 @@ export class AppComponent implements OnInit {
 
           // Initialize the map at the desired location.
           this.location = geocoderResult.geometry.location;
+          console.log("From app",geocoderResult.geometry.location.lat(), geocoderResult.geometry.location.lng());
           this.map = new google.maps.Map(this.mapElement.nativeElement, {
             center: this.location,
             zoom: this.zoom,
