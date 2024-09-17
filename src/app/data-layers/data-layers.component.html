@@ -1,1 +1,29 @@
-<p>data-layers works!</p>
+<p *ngIf="isLoading">Loading</p>
+
+<div class="d-flex col-row mb-3">
+  <div class="me-2">
+    <p-radioButton name="fluxCategory" value="annualFlux" [(ngModel)]="layerId" inputId="annualFlux" />
+    <label for="ingredient1" class="ml-2">
+      Yearly
+    </label>
+  </div>
+
+  <div class="me-3">
+    <p-radioButton name="fluxCategory" value="monthlyFlux" [(ngModel)]="layerId" inputId="monthlyFlux" />
+    <label for="ingredient2" class="ml-2">
+      Monthly
+    </label>
+  </div>
+  <div>
+    <p-button label="Submit" (click)="onFluxChange()" />
+  </div>
+</div>
+
+<div class="d-flex" *ngIf="showMonthlyFlux">
+  <ng-container *ngFor="let month of monthNames; index as i; first as isFirst">
+    <p-button label="{{month}}" class="mt-2 me-2" severity="info" [outlined]="true" (click)="onMonth(i)" />
+  </ng-container>
+</div>
+
+
+

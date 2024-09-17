@@ -7,17 +7,18 @@ import { SearchBarComponent } from './shared/components/search-bar/search-bar.co
 import { Loader } from '@googlemaps/js-api-loader';
 import { BuildingInsightsComponent } from './building-insights/building-insights.component';
 import { BuildingInsightsResponse } from './shared/interfaces/solar.interface';
+import { DataLayersComponent } from './data-layers/data-layers.component';
 
 @Component({
   selector: 'app-root',
   standalone: true,
-  imports: [RouterOutlet, GoogleMap, ButtonModule, SearchBarComponent, BuildingInsightsComponent],
+  imports: [RouterOutlet, GoogleMap, ButtonModule, SearchBarComponent, BuildingInsightsComponent, DataLayersComponent],
   templateUrl: './app.component.html',
   styleUrl: './app.component.scss',
 })
 export class AppComponent implements OnInit {
   title = 'solar-roof-estimator';
-  googleMapsApiKey = '';
+  googleMapsApiKey = 'AIzaSyBgBzxUb1STGGRI4gMGooODJYRVG_yUK9o';
   defaultPlace = {
     name: 'Rinconada Library',
     address: '1213 Newell Rd, Palo Alto, CA 94303',
@@ -77,5 +78,10 @@ export class AppComponent implements OnInit {
         }
       });
     });
+  }
+
+  buildingInsightsResponse(event: BuildingInsightsResponse) {
+    this.buildingInsights = event;
+    console.log(this.buildingInsights);
   }
 }

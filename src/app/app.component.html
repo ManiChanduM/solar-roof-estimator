@@ -4,8 +4,11 @@
   <div class="row">
     <div class="w-100" style="height: 60vh;" #mapElement></div>
   </div>
+  <div class="row mt-3 text-center">
+    <app-data-layers [location]="location" [map]="map" [googleMapsApiKey]="googleMapsApiKey" [buildingInsights]="buildingInsights" [geometryLibrary]="geometryLibrary"></app-data-layers>
+  </div>
   <div class="row">
-    <app-building-insights [location]="location" [map]="map" [geometryLibrary]="geometryLibrary" [googleMapsApiKey]="googleMapsApiKey"></app-building-insights>
-    <!-- <app-data-layers [map]="map"></app-data-layers> -->
+    <app-building-insights [location]="location" [map]="map" [geometryLibrary]="geometryLibrary"
+      [googleMapsApiKey]="googleMapsApiKey" (buildingInsightsResponse)="buildingInsightsResponse($event)"></app-building-insights>
   </div>
 </div>

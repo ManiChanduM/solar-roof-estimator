@@ -1,4 +1,4 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { BuildingInsightsResponse, RequestError, SolarPanelConfig } from '../shared/interfaces/solar.interface';
 import { BuildingInsightsService } from '../shared/services/building-insights.service';
 import { CommonModule, JsonPipe } from '@angular/common';
@@ -24,6 +24,7 @@ export class BuildingInsightsComponent implements OnInit {
   @Input('geometryLibrary') geometryLibrary!: google.maps.GeometryLibrary;
   @Input('location') location!: google.maps.LatLng;
   @Input('map') map!: google.maps.Map;
+  @Output() buildingInsightsResponse = new EventEmitter<BuildingInsightsResponse>();
 
   icon = 'home';
   title = 'Building Insights endpoint';
@@ -48,7 +49,7 @@ export class BuildingInsightsComponent implements OnInit {
   yearlyKwhEnergyConsumption!: number;
 
 
-  constructor(private buildingInsightsService: BuildingInsightsService,) { }
+  constructor(private buildingInsightsService: BuildingInsightsService) { }
 
   ngOnInit() {
 
@@ -63,6 +64,7 @@ export class BuildingInsightsComponent implements OnInit {
     if (this.location) {
       this.buildingInsightsService.findClosestBuilding(this.location, this.googleMapsApiKey).subscribe(res => {
         this.buildingInsights = res;
+        this.buildingInsightsResponse.emit(this.buildingInsights);
         console.log(this.buildingInsights);
 
 
