@@ -1,29 +1,82 @@
-<p *ngIf="isLoading">Loading</p>
+<h3 class="fw-light text-center">Data Layer</h3>
 
-<div class="d-flex col-row mb-3">
-  <div class="me-2">
-    <p-radioButton name="fluxCategory" value="annualFlux" [(ngModel)]="layerId" inputId="annualFlux" />
-    <label for="ingredient1" class="ml-2">
-      Yearly
-    </label>
+<div class="d-flex  justify-content-around">
+  <!-- Indicator -->
+  <div *ngIf="layer?.palette">
+    <div class="border rounded" [ngStyle]="setStyle()" style="width: 216px; height: 16px;">
+      <div class="d-flex justify-content-between mt-3">
+        <span>{{layer?.palette?.min}}</span>
+        <span>{{layer?.palette?.max}}</span>
+      </div>
+    </div>
+  </div>
+  <div *ngIf="!layer?.palette">
+    <div class="border rounded" style="width: 216px; height: 16px;">
+      <div class="d-flex justify-content-between mt-3">
+        <span>Shady</span>
+        <span>Sunny</span>
+      </div>
+    </div>
   </div>
 
-  <div class="me-3">
-    <p-radioButton name="fluxCategory" value="monthlyFlux" [(ngModel)]="layerId" inputId="monthlyFlux" />
-    <label for="ingredient2" class="ml-2">
-      Monthly
-    </label>
-  </div>
-  <div>
-    <p-button label="Submit" (click)="onFluxChange()" />
+  <!-- Radio Button -->
+  <div class="">
+    <!-- <form> -->
+      <div class="form-check form-check-inline">
+        <input class="form-check-input" type="radio" name="inlineRadioOptions" id="inlineRadio1" value="annualFlux"
+          [(ngModel)]="layerId">
+        <label class="form-check-label" for="inlineRadio1">Annual Flux</label>
+      </div>
+      <div class="form-check form-check-inline">
+        <input class="form-check-input" type="radio" name="inlineRadioOptions" id="inlineRadio2" value="monthlyFlux"
+          [(ngModel)]="layerId"  >
+          <!-- (change)="onFluxChange()" -->
+        <label class="form-check-label" for="inlineRadio2">Monthly Flux</label>
+      </div>
+      <!-- <p-button label="Submit" (click)="onFluxChange()" /> -->
+       <div class="form-check form-check-inline">
+        <button type="button" class="btn btn-outline-success" (click)="onFluxChange()">Submit</button>
+       </div>
+    <!-- </form> -->
   </div>
 </div>
 
-<div class="d-flex" *ngIf="showMonthlyFlux">
+<div class="d-flex justify-content-center mt-5" *ngIf="isLoading">
+  <p-progressSpinner ariaLabel="loading" [style]="{'height': '4.5rem'}" />
+</div>
+
+
+
+<!-- <div class="d-flex flex-wrap gap-3">
+    <div class="me-2">
+      <p-radioButton name="fluxCategory" value="annualFlux" [(ngModel)]="layerId" inputId="annualFlux"
+        id="fluxCategory" />
+      <label for="fluxCategory" class="ml-2">
+        Yearly
+      </label>
+    </div>
+
+    <div class="me-3">
+      <p-radioButton name="fluxCategory" value="monthlyFlux" [(ngModel)]="layerId" inputId="monthlyFlux"
+        id="fluxCategory" />
+      <label for="fluxCategory" class="ml-2">
+        Monthly
+      </label>
+    </div>
+    <div>
+      <p-button label="Submit" (click)="onFluxChange()" />
+    </div>
+  </div> -->
+<!-- <div class="form-check form-check-inline">
+    <button type="button" class="btn btn-primary" (click)="onFluxChange()">Submit</button>
+  </div> -->
+<div class="d-flex mt-5 justify-content-center" *ngIf="layerId === 'monthlyFlux' && !isLoading">
   <ng-container *ngFor="let month of monthNames; index as i; first as isFirst">
-    <p-button label="{{month}}" class="mt-2 me-2" severity="info" [outlined]="true" (click)="onMonth(i)" />
+    <button type="button" class="btn btn-outline-success me-2" (click)="onMonth(i)">{{month}}</button>
   </ng-container>
 </div>
-
-
-
+<!-- <div class="d-flex">
+  <div *ngFor="let month of monthNames; index as i; first as isFirst">
+    <p-button label="{{month}}" class="mt-2 me-2" severity="info" [outlined]="true" (click)="onMonth(i)" />
+  </div>
+</div> -->

@@ -1,9 +1,11 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+// import { FormsModule } from '@angular/forms';
 import { BuildingInsightsResponse, RequestError, SolarPanelConfig } from '../shared/interfaces/solar.interface';
 import { BuildingInsightsService } from '../shared/services/building-insights.service';
 import { CommonModule, JsonPipe } from '@angular/common';
 import { createPalette, normalize, rgbToColor } from './../shared/utils/visualize';
 import { panelsPalette } from './../shared/utils/colors';
+// import { SliderModule } from 'primeng/slider';
 
 @Component({
   selector: 'app-building-insights',
@@ -18,7 +20,7 @@ export class BuildingInsightsComponent implements OnInit {
   buildingInsights!: BuildingInsightsResponse | any;
   configId!: number;
   panelCapacityWatts!: number;
-  showPanels  = true;
+  showPanels = true;
 
   @Input('googleMapsApiKey') googleMapsApiKey!: string;
   @Input('geometryLibrary') geometryLibrary!: google.maps.GeometryLibrary;
@@ -77,6 +79,7 @@ export class BuildingInsightsComponent implements OnInit {
           console.log('Panel Count:', this.panelConfig.panelsCount);
           console.log('Max Panels', this.buildingInsights.solarPotential.solarPanels.length);
           console.log('Yearly Energy', this.panelConfig.yearlyEnergyDcKwh * this.panelCapacityRatio);
+          // this.setSolarPanels();
         }
       }, err => {
         console.error('GET buildingInsights error\n', err);
@@ -138,10 +141,5 @@ export class BuildingInsightsComponent implements OnInit {
     this.solarPanels.map((panel, i) =>
       panel.setMap(this.showPanels && this.panelConfig && i < this.panelConfig.panelsCount ? this.map : null),
     );
-
   }
-
-
-
-
 }

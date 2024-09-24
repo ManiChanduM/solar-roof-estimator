@@ -1,51 +1,54 @@
-<ng-container *ngIf="configId">
-  <p class="fw-light fs-4 mt-3 text-center">Building Insights</p>
+<h3 class="fw-light text-center mb-3">Building Insights</h3>
+<ng-container *ngIf="requestError">
+  <p class="text-danger">Solar Data is not available for this building, please try with a different address.</p>
+</ng-container>
 
-  <table class="table table-bordered">
-    <thead>
-      <tr>
-        <th scope="col">Type</th>
-        <th scope="col">Value</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr>
-        <td>Yearly Energy</td>
-        <td>{{(panelConfig?.yearlyEnergyDcKwh * panelCapacityRatio / 1000).toFixed(2)}} MWh</td>
-      </tr>
-      <tr>
-        <td>Panels Count</td>
-        <td>{{panelConfig.panelsCount}} panels</td>
-      </tr>
-      <tr>
-        <td>Max Panel</td>
-        <td>{{buildingInsights.solarPotential.solarPanels.length}}</td>
-      </tr>
-      <tr>
-        <td>Panel Capacity</td>
-        <td>{{panelCapacityWattsInput}}</td>
-      </tr>
-      <tr>
-        <td>Annual Sunshine</td>
-        <td>{{buildingInsights.solarPotential.maxSunshineHoursPerYear}}</td>
-      </tr>
-      <tr>
-        <td>Roof area</td>
-        <td>{{buildingInsights.solarPotential.wholeRoofStats.areaMeters2}}</td>
-      </tr>
-      <tr>
-        <td>CO2</td>
-        <td>{{buildingInsights.solarPotential.carbonOffsetFactorKgPerMwh}}</td>
-      </tr>
-      <tr>
-        <td>Yeraly Energy</td>
-        <td>{{panelConfig.yearlyEnergyDcKwh * panelCapacityRatio}}</td>
-      </tr>
-    </tbody>
-  </table>
-  <div class="d-flex justify-content-end">
-    <button type="button" class="btn btn-light me-2" (click)="setPanelConfig(24)">Change Panels</button>
-    <button type="button" class="btn btn-light" (click)="setSolarPanels()">Set Solar Panels</button>
+<ng-container *ngIf="configId && !requestError">
+  <div class="row d-flex justify-content-center">
+    <table class="table table-bordered w-50">
+      <thead>
+        <tr>
+          <th scope="col">Attribute</th>
+          <th scope="col">Value</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>Annual Sunshine</td>
+          <td>{{buildingInsights.solarPotential.maxSunshineHoursPerYear}} Hours</td>
+        </tr>
+        <tr>
+          <td>Roof area</td>
+          <td>{{(buildingInsights.solarPotential.wholeRoofStats.areaMeters2).toFixed()}} M<sup>2</sup></td>
+        </tr>
+        <tr>
+          <td>Max Panel</td>
+          <td>{{buildingInsights.solarPotential.solarPanels.length}}</td>
+        </tr>
+        <tr>
+          <td>Panel Capacity</td>
+          <td>{{panelCapacityWattsInput}} Watts</td>
+        </tr>
+        <tr>
+          <td>Yearly Energy</td>
+          <td>{{(panelConfig?.yearlyEnergyDcKwh * panelCapacityRatio / 1000).toFixed(2)}} MWh</td>
+        </tr>
+        <tr>
+          <td>Panels Count</td>
+          <td>{{panelConfig.panelsCount}} panels</td>
+        </tr>
+        <!-- <tr>
+          <td>CO2</td>
+          <td>{{(buildingInsights.solarPotential.carbonOffsetFactorKgPerMwh).toFixed()}} KGs</td>
+        </tr> -->
+      </tbody>
+    </table>
+  </div>
+
+
+  <div class="d-flex justify-content-center">
+    <button type="button" class="btn btn-light me-2" (click)="setPanelConfig(10)">Change Panels</button>
+    <button type="button" class="btn btn-outline-success" (click)="setSolarPanels()">Set Solar Panels</button>
   </div>
 
 </ng-container>

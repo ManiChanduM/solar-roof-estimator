@@ -1,5 +1,5 @@
 import { Component, Input, OnInit } from '@angular/core';
-import { CommonModule } from '@angular/common';
+import { CommonModule, NgStyle } from '@angular/common';
 
 import { DataLayersService } from './../shared/services/data-layers.service';
 import { BuildingInsightsResponse, DataLayersResponse, LayerId, RequestError } from '../shared/interfaces/solar.interface';
@@ -8,12 +8,12 @@ import { BuildingInsightsService } from '../shared/services/building-insights.se
 import { ButtonModule } from 'primeng/button';
 import { RadioButtonModule } from 'primeng/radiobutton';
 import { FormsModule } from '@angular/forms';
-
+import { ProgressSpinnerModule } from 'primeng/progressspinner';
 
 @Component({
   selector: 'app-data-layers',
   standalone: true,
-  imports: [ButtonModule, CommonModule, RadioButtonModule, FormsModule],
+  imports: [ButtonModule, CommonModule, RadioButtonModule, FormsModule, NgStyle, ProgressSpinnerModule],
   templateUrl: './data-layers.component.html',
   styleUrl: './data-layers.component.scss'
 })
@@ -58,13 +58,14 @@ export class DataLayersComponent implements OnInit {
   dataLayersResponse!: DataLayersResponse | undefined;
   requestError!: RequestError | undefined;
   // apiResponseDialog!: MdDialog;
-  layerId: LayerId | any = 'monthlyFlux';
+  layerId: LayerId | any = 'annualFlux';
+  // layerId: LayerId | any = 'monthlyFlux';
   layer!: Layer | undefined;
   imageryQuality!: 'HIGH' | 'MEDIUM' | 'LOW';
 
   playAnimation = true;
   tick = 0;
-  month = 4;
+  month = 0;
   day = 14;
   hour = 0;
 
@@ -82,9 +83,17 @@ export class DataLayersComponent implements OnInit {
     if (this.buildingInsights) {
       this.showDataLayer();
     }
+
   }
 
   ngOnInit() {
+  }
+
+  setStyle() {
+    const layerPalatte = this.layer?.palette?.colors.map(hex => '#' + hex)
+    return {
+      'background': `linear-gradient(to right, ${layerPalatte})`
+    }
   }
 
   // setMapOverlay() {
@@ -214,6 +223,6 @@ export class DataLayersComponent implements OnInit {
       this.layer = undefined;
       this.showDataLayer();
     }
-
+    // console.log('Flux change:', this.layerId);
   }
 }

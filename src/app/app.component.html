@@ -1,14 +1,27 @@
-<div class="container mt-4">
+<div class="container-fluid">
+
+  <!-- Search Bar -->
   <app-search-bar [initialValue]="defaultPlace.name" [map]="map" [zoom]="zoom" [location]="location"
-    [placesLibrary]="placesLibrary"></app-search-bar>
+    [placesLibrary]="placesLibrary" (onPlaceChanged)="placeChanged($event)"></app-search-bar>
+
+  <!-- Google Map -->
   <div class="row">
     <div class="w-100" style="height: 60vh;" #mapElement></div>
   </div>
-  <div class="row mt-3 text-center">
-    <app-data-layers [location]="location" [map]="map" [googleMapsApiKey]="googleMapsApiKey" [buildingInsights]="buildingInsights" [geometryLibrary]="geometryLibrary"></app-data-layers>
+
+  <div class="row mt-3">
+    <!-- Building Insights -->
+    <div class="col">
+      <app-building-insights [location]="location" [map]="map" [geometryLibrary]="geometryLibrary"
+        [googleMapsApiKey]="googleMapsApiKey"
+        (buildingInsightsResponse)="buildingInsightsResponse($event)"></app-building-insights>
+    </div>
+
+    <!-- Data Layers -->
+    <div class="col">
+      <app-data-layers [location]="location" [map]="map" [googleMapsApiKey]="googleMapsApiKey"
+        [buildingInsights]="buildingInsights" [geometryLibrary]="geometryLibrary"></app-data-layers>
+    </div>
   </div>
-  <div class="row">
-    <app-building-insights [location]="location" [map]="map" [geometryLibrary]="geometryLibrary"
-      [googleMapsApiKey]="googleMapsApiKey" (buildingInsightsResponse)="buildingInsightsResponse($event)"></app-building-insights>
-  </div>
+
 </div>

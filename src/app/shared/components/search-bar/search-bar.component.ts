@@ -1,4 +1,4 @@
-import { AfterViewInit, Component, ElementRef, Input, OnInit, ViewChild } from '@angular/core';
+import { AfterViewInit, Component, ElementRef, Input, OnInit, ViewChild, Output, EventEmitter } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { GoogleMap } from '@angular/google-maps';
 import { AutoCompleteModule } from 'primeng/autocomplete';
@@ -18,9 +18,10 @@ export class SearchBarComponent implements OnInit, AfterViewInit {
   @Input('map') map!: google.maps.Map;
   @Input('initialValue') initialValue!: string;
   @Input('zoom') zoom!: number;
+  @Output('onPlaceChanged') onPlaceChanged = new EventEmitter<any>();
   @ViewChild('textFieldElement') textFieldElement!: ElementRef;
   autocomplete!: google.maps.places.Autocomplete;
-  ngOnInit() {}
+  ngOnInit() { }
 
   ngAfterViewInit() {
     this.autocomplete = new google.maps.places.Autocomplete(this.textFieldElement.nativeElement, {
@@ -28,7 +29,7 @@ export class SearchBarComponent implements OnInit, AfterViewInit {
     });
     this.autocomplete.addListener('place_changed', async () => {
       const place: any = this.autocomplete?.getPlace();
-
+      this.onPlaceChanged.emit(place);
       if (!place.geometry || !place.geometry.location) {
         this.textFieldElement.nativeElement.value = '';
         return;

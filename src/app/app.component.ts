@@ -9,6 +9,7 @@ import { BuildingInsightsComponent } from './building-insights/building-insights
 import { BuildingInsightsResponse } from './shared/interfaces/solar.interface';
 import { DataLayersComponent } from './data-layers/data-layers.component';
 
+
 @Component({
   selector: 'app-root',
   standalone: true,
@@ -39,6 +40,11 @@ export class AppComponent implements OnInit {
   ngOnInit() {
     this.primengConfig.ripple = true;
     this.loadGoogleMaps();
+  }
+
+  ngOnChanges() {
+    // this.defaultPlace.address = ;
+    // this.loadGoogleMaps();
   }
 
   loadGoogleMaps() {
@@ -84,4 +90,11 @@ export class AppComponent implements OnInit {
     this.buildingInsights = event;
     console.log(this.buildingInsights);
   }
+
+  placeChanged(event: any) {
+    console.log('placeChanged', event.formatted_address);
+    this.defaultPlace.address = event.formatted_address;
+    this.loadGoogleMaps();
+  }
+
 }
